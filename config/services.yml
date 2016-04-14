@@ -1,0 +1,48 @@
+services:
+    request_context:
+        class: Symfony\Component\Routing\RequestContext
+    route_loader:
+        class: Symfony\Component\Routing\Loader\YamlFileLoader
+        arguments: [ "@file_locator" ]
+    router:
+        class: Symfony\Component\Routing\Router
+        arguments:
+            - "@route_loader"
+            - "routing.yml"
+            - { "cache_dir": "%root_dir%/cache" } 
+            - "@request_context"
+    file_locator:
+        class: Symfony\Component\Config\FileLocator
+        arguments: 
+            - [ "%root_dir%/config" ]
+    request_stack:
+        class: Symfony\Component\HttpFoundation\RequestStack 
+    event_dispatcher:
+        class: Symfony\Component\EventDispatcher\ContainerAwareEventDispatcher
+        arguments: [ "@service_container" ]
+    controller_resolver:
+        class: DMF\ControllerResolver
+        arguments: [ "@service_container" ]
+    router_subscriber:
+        class: Symfony\Component\HttpKernel\EventListener\RouterListener
+        arguments: [ "@router", "@request_stack"]
+        tags:
+            - { name: kernel.event_subscriber }
+    service_container:
+        synthetic: "true"
+    # 注入Twig，渲染模板
+    twig_loader:
+        class: Twig_Loader_Filesystem
+        arguments: [ "%root_dir%/app/Template" ]
+    twig:
+        class: Twig_Environment
+        arguments: 
+            - "@twig_loader"
+            - { "cache": "%root_dir%/cache" }
+    # 注入PDO，数据库操作
+    db_connection:
+        class: PDO
+        arguments:
+            - "mysql:dbname=%database_name%;host=%database_host%;port=%database_port%"
+            - "%database_user%"
+            - "%database_password%"

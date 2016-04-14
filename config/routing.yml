@@ -1,0 +1,7 @@
+route1:
+    path:     /foo
+    defaults: { _controller: 'Controller\DemoController::indexAction' }
+
+route2:
+    path:     /foo/user
+    defaults: { _controller: 'Controller\DemoController::userAction' }
