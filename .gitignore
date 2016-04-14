@@ -1,4 +1,9 @@
 /vendor/
+/cache/*
+!cache/.gitkeep
 /composer.phar
+!web/js/.gitkeep
+!web/css/.gitkeep
+!web/img/.gitkeep
 .DS_Store
 *.swp
