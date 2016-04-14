@@ -1,4 +1,7 @@
 {
+    "name": "dm/framework",
+    "license": "MIT",
+    "type": "project",
     "autoload": {
         "psr-4": { "": "app/", "DMF\\": "core" }
     },
