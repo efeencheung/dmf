@@ -57,10 +57,13 @@ class Framework
             $loader->load('config.yml');
             $loader->load('services.yml');
 
-            /* 如果调试模式开启，关闭Route缓存 */
+            /* 如果调试模式开启，关闭Route缓存，关闭Twig缓存，替换参数为空就是删除cache目录配置 */
             if ($this->isDebug) {
                 $routerDefinition = $containerBuilder->getDefinition('router');   
                 $routerDefinition->replaceArgument(2, array());
+
+                $twigDefinition = $containerBuilder->getDefinition('twig');   
+                $twigDefinition->replaceArgument(1, array('cache'=>false));
             }
 
             /* 添加EventDispatcher到Container，并使用tag标记，以便可以在service中配置事件，初始化时被加载 */
